@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}passengerpage{% endblock title %}
+
+{% block stylesheet %}<link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.5.0/maps/maps.css'>
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.5.0/maps/maps-web.min.js"></script>{% endblock stylesheet %}
+
+{% block body %}
+
+<div class="container m-5 "></div>
+
+<!-- Replace version in the URL with desired library version -->
+<!-- Include SDK's stylesheet -->
+
+
+
+<!-- <script>
+    const apiKey = 'lfJylnZv8kZrCpdt3cVVCLD3HwnY3TQv';
+    const searchService = tomtom.services.fuzzySearch({
+        key: apiKey,
+        countrySet: 'IN'
+    });
+    const addressInput = document.getElementById('address-input');
+    const addressList = document.getElementById('address-list');
+    addressInput.addEventListener('input', function(event) {
+        searchService.search(event.target.value).then(function(response) {
+            const addresses = response.results.map(function(result) {
+                return result.address.freeformAddress;
+            });
+            addressList.innerHTML = '';
+            addresses.forEach(function(address) {
+                const listItem = document.createElement('li');
+                listItem.textContent = address;
+                addressList.appendChild(listItem);
+            });
+        });
+    });
+</script> -->
+
+
+
+<form method="POST" action="/passenger/" class="m-5 col-4 mx-auto bg-primary bg-opacity-25"">
+    {% csrf_token %}
+    <div  class=" mx-4 my-3 p-3">
+  <h4> Book my Ride</h4>
+  <div class="mb-3">
+    <label class="form-label">
+      Source</label>
+    <input type="text" name="src" class="form-control" id="Source aria-describedby=" emailHelp">
+
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Destination</label>
+    <input type="text" name="dest" class="form-control" id="Source aria-describedby=" emailHelp">
+
+  </div>
+  <div class="mb-3">
+    <label class="form-label">DateTime</label>
+    <input type="text" name="datetime" class="form-control" id="Source aria-describedby=" emailHelp">
+
+  </div>
+
+  <!-- <button type="submit"  name="login" class="btn btn-primary me-3">login</button> -->
+  <button type="submit" name="Book " class="btn btn-primary">Book and intimate me !</button>
+  </div>
+</form>
+
+</div>
+
+<div class="container pt-3 pb-0">
+  <p>
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#active"
+      aria-expanded="false" aria-controls="collapseExample">
+      Active Rides
+    </button>
+  </p>
+  <div class="collapse" id="active">
+    <div class="card card-body">
+      <div class="card-group" id="card-grp">
+        <div class="card card-items">
+          <form method="POST" action="/rideover/">
+
+            {% csrf_token %}
+            <input type="text" name="pk" value={{pk}} style="display: none; visibility: hidden;">
+            <button type="submit" name="rideoverintimation" id="rideoverintimation" class="btn btn-primary">Ride Over !
+            </button>
+
+          </form>
+          <div class="card-body">
+            <h5 class="card-title">{{RideTitle}}</h5>
+            <p class="card-text">
+            <div id="chk"  class="d-none">{{pk}}</div>
+            <div> From {{Source}} To {{Destination}}</div>
+            <div> Rider : {{Rider}} Passenger: {{Passenger}}</div>
+            <div> {{Passenger}} pays : {{Fare}} Re  {{d}}</div>
+
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+      <script type="text/javascript">
+        if (document.getElementById("chk").innerText == "") {
+          console.log("in2")
+          document.getElementsByClassName("card-items")[0].style.display = "none";
+          document.getElementById("card-grp").innerText = "No active rides!"
+        }
+      </script>
+    </div>
+  </div>
+
+</div>
+
+<div class="container">
+  <a class="btn btn-primary" href="/logout" role="button">logout</a>
+</div>
+
+
+
+<script type="text/javascript" src="{% static 'logic.js' %}"></script>
+{% endblock body %}

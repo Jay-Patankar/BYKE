@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}driverpage{% endblock title %}
+
+
+{% block body %}
+<div class="container m-5 "></div>
+<form method="POST" action="/driver/" class="m-5 col-4 mx-auto bg-primary bg-opacity-25"">
+    {% csrf_token %}
+    <div  class="mx-4 my-3 p-3">
+    <h4 > Book my Ride</h4>
+    <div class="mb-3">
+      <label class="form-label">
+        Source</label>
+      <input type="text" name="src" class="form-control" id="Source aria-describedby="emailHelp">
+      
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Destination</label>
+        <input type="text" name="dest" class="form-control" id="Source aria-describedby="emailHelp">
+        
+      </div>
+      <div class="mb-3">
+        <label class="form-label">DateTime</label>
+        <input type="text" name="datetime" class="form-control" id="Source aria-describedby="emailHelp">
+        
+      </div>
+      
+    <!-- <button type="submit"  name="login" class="btn btn-primary me-3">login</button> -->
+    <button type="submit"  name="Book " class="btn btn-primary">Book and intimate me !</button>
+</div>
+  </form>
+
+</div>
+
+<div class="container pt-3 pb-0">
+  <p>
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#active"
+      aria-expanded="false" aria-controls="collapseExample">
+      Active Rides
+    </button>
+  </p>
+  <div class="collapse" id="active">
+    <div class="card card-body">
+      <div class="card-group" id="card-grp">
+        <div class="card card-items">
+          <form method="POST" action="/rideover/">
+
+            {% csrf_token %}
+            <input type="text" name="pk" value={{pk}} style="display: none; visibility: hidden;">
+            <button type="submit" name="rideoverintimation" id="rideoverintimation" class="btn btn-primary">Ride Over !
+            </button>
+
+          </form>
+          <div class="card-body">
+            <h5 class="card-title">{{RideTitle}}</h5>
+            <p class="card-text">
+            <div id="chk" class="d-none>"{{pk}}</div>
+            <div> From {{Source}} To {{Destination}}</div>
+            <div> Rider : {{Rider}} Passenger: {{Passenger}}</div>
+            <div> {{Passenger}} pays : {{Fare}} Re</div>
+
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+      <script type="text/javascript">
+        if (document.getElementById("chk").innerText == "") {
+          console.log("in2")
+          document.getElementsByClassName("card-items")[0].style.display = "none";
+          document.getElementById("card-grp").innerText = "No active rides!"
+        }
+      </script>
+    </div>
+  </div>
+
+</div>
+
+
+</div>
+<div class="container">
+<a class="btn btn-primary" href="/logout" role="button">logout</a>
+</div>
+{% endblock body %}
+
+

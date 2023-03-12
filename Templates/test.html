@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body onload="login_signUp()">
+        <div class="card" id="card">
+            <div class="front">
+                <p class="login_word">LOG IN</p>
+                <img src="https://drive.google.com/uc?export=view&id=1K5_tAX_taOQQ0wwmFx3P--V05kjvg4cu" alt="person picture">
+                <form method="post" action="">
+                    <input type="text" name="username" placeholder="username" class="f1" maxlength="10" required autocomplete="off">
+                    <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required autocomplete="off">
+                    <button class="f1" name="login" value="clicked">Log in</button>
+                    <p>Not registered? <span onclick="flip()">Create an account</span></p>
+                </form>
+            </div>
+            <div class="back">
+                <p class="signup_word">SIGN UP</p>
+                <form method="post" action="" id="signUp">
+                    <input type="text" name="first_name" placeholder="first name" class="f1" maxlength="10" required style="margin-top:35px;" autocomplete="off">
+                    <input type="text" name="last_name" placeholder="last name" class="f1" maxlength="10" required autocomplete="off">
+                    <input type="text" name="username" placeholder="username" class="f1" maxlength="10" required autocomplete="off">
+                    <input type="email" name="email" placeholder="e-mail" class="f1" maxlength="30" required autocomplete="off">
+                    <input type="password" name="password" placeholder="password" class="f1" maxlength="10" required autocomplete="off">
+                    <button class="f1" name="signup" value="clicked">Sign up</button>
+                </form>
+            </div>
+        </div>
+        <script src="dynamism.js"></script>
+    </body>
+    
+</html>
