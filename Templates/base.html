@@ -9,7 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@200&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    {% block stylesheet %}{% endblock stylesheet %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    
+    {% block stylesheet %}
+    
+    
+    {% endblock stylesheet %}
 
     {% load static %}
    <style>
@@ -73,12 +78,77 @@
   {% endif %}
 {% block body %}{% endblock body %}
 
-<nav class="navbar bg-body-secondary">
+<!-- <nav class="navbar bg-body-secondary  mt-5">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Default</a>
   </div>
-</nav>
+</nav> -->
  
+    <!-- Footer -->
+    <footer class="text-center text-white  mt-4" style="background-image: linear-gradient(rgb(249, 245, 150),rgb(196, 196, 243));">
+      <!-- Grid container -->
+      <div class="container pt-4">
+        <!-- Section: Social media -->
+        <section class="mb-4">
+          <!-- Facebook -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fa fa-facebook-f"></i
+          ></a>
+    
+          <!-- Twitter -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fa fa-twitter"></i
+          ></a>
+    
+          <!-- Google -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fa fa-google"></i
+          ></a>
+    
+          <!-- Instagram -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ><i class="fa fa-instagram"></i
+          ></a>
+    
+          <!-- Linkedin -->
+          <a
+            class="btn btn-link btn-floating btn-lg text-dark m-1"
+            href="#!"
+            role="button"
+            data-mdb-ripple-color="dark"
+            ></i
+          ><i class="fa fa-linkedin"></i></a>
+          <!-- Github -->
+          
+         
+        </section>
+        <!-- Section: Social media -->
+      </div>
+      <!-- Grid container -->
+    
+      <!-- Copyright -->
+      <div class="text-center text-dark p-3" ">
+        © 2023 Copyright:
+        <a class="text-dark" href="#">JAYPATANKAR@MINE</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   </body>

@@ -24,6 +24,7 @@ def register(request):
             Password=request.POST.get("pwd")
             p=Person(UserName=UserName,Password=Password)
             p.save()
+            messages.success(request, "You have been successfully registered ! ")
             User.objects.create_user(UserName, '', Password)
             #return render(request, "login.html")
       return render(request, "login.html",{'nbar': 'l'})
@@ -41,11 +42,13 @@ def loginUser(request):
             if request.POST.get("role1")=="1":
                   print("driver huun")
                   login(request,user)
+                  messages.success(request, "You have been successfully logged in ! ")
                   return redirect("/driver")
             
             elif request.POST.get("role1")=="2":
                   print("passenger huun")
                   login(request,user)
+                  messages.success(request, "You have been successfully logged in ! ")
                   return redirect("/passenger")
       else:
             return render(request, "login.html",{'nbar': 'l'})
@@ -54,6 +57,7 @@ def loginUser(request):
 
 def logoutUser(request):
       logout(request)
+      messages.success(request, "You have been successfully logged out ! ")
       return redirect("/register")
       pass
 
@@ -78,7 +82,8 @@ def driver(request):
             psng = Passenger.objects.all()
             flag=0
             for p in psng:
-                  if abs(float(p.SourceLat)-slat)<=0.0005  and abs(float(p.SourceLon)-slon)<=0.0005 and abs(float(p.DestinationLat)-dlat)<=0.0005  and abs(float(p.DestinationLon)-dlon)<=0.0005:
+                  usefuld,rest=str(p.RideDate).split("+")
+                  if str(usefuld)==str(DateT)  and abs(float(p.SourceLat)-slat)<=0.0005  and abs(float(p.SourceLon)-slon)<=0.0005 and abs(float(p.DestinationLat)-dlat)<=0.0005  and abs(float(p.DestinationLon)-dlon)<=0.0005:
                         tbd=p.UserName
                         query={
                               "origins": [
@@ -142,8 +147,9 @@ def passenger(request):
             Drivers = Driver.objects.all()
             flag=0
             for driver in Drivers:
-                  print(float(driver.SourceLat))
-                  if abs(float(driver.SourceLat)-slat)<=0.0005  and abs(float(driver.SourceLon)-slon)<=0.0005 and abs(float(driver.DestinationLat)-dlat)<=0.0005  and abs(float(driver.DestinationLon)-dlon)<=0.0005:
+                  usefuld,rest=str(driver.RideDate).split("+")
+                  print(str(usefuld),str(DateT),"date")
+                  if str(driver.RideDate)==str(DateT) and abs(float(driver.SourceLat)-slat)<=0.0005  and abs(float(driver.SourceLon)-slon)<=0.0005 and abs(float(driver.DestinationLat)-dlat)<=0.0005  and abs(float(driver.DestinationLon)-dlon)<=0.0005:
                         tbd=driver.UserName
                         query={
                               "origins": [

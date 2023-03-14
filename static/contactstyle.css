@@ -23,7 +23,7 @@ h4 {
 
 input:focus ~ label, textarea:focus ~ label, input:valid ~ label, textarea:valid ~ label {
     font-size: 0.75em;
-    color: #999;
+    color: #635b5b;
     top: -5px;
     -webkit-transition: all 0.225s ease;
     transition: all 0.225s ease;
@@ -44,7 +44,7 @@ input:focus ~ label, textarea:focus ~ label, input:valid ~ label, textarea:valid
 }
 
 .styled-input label {
-    color: #999;
+    color: #322f2f;
     padding: 1.3rem 30px 1rem 30px;
     position: absolute;
     top: 10px;
@@ -121,7 +121,7 @@ textarea {
 }
 
 input[type=checkbox] + label {
-  color: #ccc;
+  color: #252424;
   font-style: italic;
 } 
 
