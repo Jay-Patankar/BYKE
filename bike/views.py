@@ -7,6 +7,7 @@ from django.contrib.auth import logout , login
 import requests,json
 from django.contrib import messages
 
+import phonenumbers 
 
 
 
@@ -20,12 +21,30 @@ def register(request):
       print("inside")
       if   request.method=="POST" :
             print("in")
-            UserName=request.POST.get("uname")
+            Phone=request.POST.get("uname")
+            Name=request.POST.get("name")
             Password=request.POST.get("pwd")
-            p=Person(UserName=UserName,Password=Password)
-            p.save()
-            messages.success(request, "You have been successfully registered ! ")
-            User.objects.create_user(UserName, '', Password)
+            try :
+                  pobj = phonenumbers.parse(Phone, None)
+                  if (phonenumbers.is_possible_number(pobj) and phonenumbers.is_valid_number(pobj))==False:
+                   messages.warning(request, "Oops phone number invalid ....please check the format  ")
+                   return redirect("/register")
+                  else:
+                        print("VALID_PHONE" ,pobj , Phone)
+                        print(phonenumbers.is_possible_number(pobj))
+                        print(phonenumbers.is_valid_number(pobj))
+           
+
+                  #p=Person(UserName=Phone,Password=Password )
+                  #p.save()
+                  messages.success(request, "You have been successfully registered ! ")
+                  User.objects.create_user(Phone, '', Password ,first_name=Name)
+                  
+            except phonenumbers.NumberParseException as e:
+                   messages.warning(request, "Oops phone number invalid ....please check the format  ")
+                   return redirect("/register")
+
+            
             #return render(request, "login.html")
       return render(request, "login.html",{'nbar': 'l'})
 
@@ -69,8 +88,9 @@ def driver(request):
              return redirect("/register")
       if request.method=="POST":
             messages.success(request, "Your ride details have been shared with potential passengers. Please check Active Rides section below to view any matching rides")
-            name=request.user.username
+            phone=request.user.username
             pwd=request.user.password
+            name=request.user.first_name
             Source=request.POST.get("src")
             Destination=request.POST.get("dest")
             DateT=request.POST.get("datetime")
@@ -85,6 +105,7 @@ def driver(request):
                   usefuld,rest=str(p.RideDate).split("+")
                   if str(usefuld)==str(DateT)  and abs(float(p.SourceLat)-slat)<=0.0005  and abs(float(p.SourceLon)-slon)<=0.0005 and abs(float(p.DestinationLat)-dlat)<=0.0005  and abs(float(p.DestinationLon)-dlon)<=0.0005:
                         tbd=p.UserName
+                        pname=p.First_Name
                         query={
                               "origins": [
                               {
@@ -104,22 +125,22 @@ def driver(request):
                         distance=response.json()["data"][0][ "routeSummary"]["lengthInMeters"]/1000
                         fare=distance*10
                         print(fare,"fare")
-                        Notice=Notification(Source=Source,Destination=Destination,Fare=fare,DateTime=DateT,Driver=name,Passenger=tbd)
+                        Notice=Notification(Source=Source,Destination=Destination,Fare=fare,DateTime=DateT,Driver_Name=name,Passenger_Name=pname,Passenger_Phone=tbd,Driver_Phone=phone)
                         Notice.save()
                         Passenger.objects.filter(UserName=tbd).delete()
                         flag=1
                         
                   
             if flag==0:
-                  d=Driver(UserName=name,Password=pwd,SourceLat=slat,SourceLon=slon,DestinationLat=dlat,DestinationLon=dlon,RideDate=DateT)
+                  d=Driver(UserName=phone,First_Name=name,Password=pwd,SourceLat=slat,SourceLon=slon,DestinationLat=dlat,DestinationLon=dlon,RideDate=DateT)
                   d.save()
                         
 
-      notifications=list(Notification.objects.filter(Driver=request.user.username))
+      notifications=list(Notification.objects.filter(Driver_Phone=request.user.username))
       if notifications!=[]:
             curr=notifications[0]
-            context={"pk":curr.id,"RideTitle":curr.Source+" to "+curr.Destination,"Source":curr.Source,"Destination":curr.Destination,"Rider":curr.Driver,"Passenger":curr.Passenger,
-            "Fare":curr.Fare}
+            context={"pk":curr.id,"RideTitle":curr.Source+" to "+curr.Destination,"Source":curr.Source,"Destination":curr.Destination,"Rider":curr.Driver_Name,"Passenger":curr.Passenger_Name,
+            "Fare":curr.Fare,"dphone":curr.Driver_Phone , "pphone": curr.Passenger_Phone}
             #Driver.objects.filter(Username=tbd).delete()
             return render(request, "driver.html",context=context)
       else:
@@ -134,8 +155,9 @@ def passenger(request):
       distanceval=-1
       if request.method=="POST":
             messages.success(request, "Your request has been noted . Please check Active Rides section below to view any matching rides")
-            name=request.user.username
+            phone=request.user.username
             pwd=request.user.password
+            name=request.user.first_name
             Source=request.POST.get("src")
             Destination=request.POST.get("dest")
             DateT=request.POST.get("datetime")
@@ -151,6 +173,7 @@ def passenger(request):
                   print(str(usefuld),str(DateT),"date")
                   if str(driver.RideDate)==str(DateT) and abs(float(driver.SourceLat)-slat)<=0.0005  and abs(float(driver.SourceLon)-slon)<=0.0005 and abs(float(driver.DestinationLat)-dlat)<=0.0005  and abs(float(driver.DestinationLon)-dlon)<=0.0005:
                         tbd=driver.UserName
+                        dname=driver.First_Name
                         query={
                               "origins": [
                               {
@@ -170,23 +193,25 @@ def passenger(request):
                         distance=response.json()["data"][0][ "routeSummary"]["lengthInMeters"]/1000
                         fare=distance*10
                         distanceval=distance
-                        Notice=Notification(Source=Source,Destination=Destination,Fare=fare,DateTime=DateT,Driver=tbd,Passenger=name)
+                        
+                        Notice=Notification(Source=Source,Destination=Destination,Fare=fare,DateTime=DateT,Driver_Name=dname,Passenger_Name=name,Passenger_Phone=phone,Driver_Phone=tbd)
                         Notice.save()
                         Driver.objects.filter(UserName=tbd).delete()
                         flag=1
                         
             if flag==0:
-                  p=Passenger(UserName=name,Password=pwd,SourceLat=slat,SourceLon=slon,DestinationLat=dlat,DestinationLon=dlon,RideDate=DateT)
+                  p=Passenger(UserName=phone,First_Name=name ,Password=pwd,SourceLat=slat,SourceLon=slon,DestinationLat=dlat,DestinationLon=dlon,RideDate=DateT)
                   p.save()      
 
             
 
-      notifications=list(Notification.objects.filter(Passenger=request.user.username))
+      notifications=list(Notification.objects.filter(Passenger_Phone=request.user.username))
       print(notifications)
       if notifications!=[]:
             curr=notifications[0]
-            context={"d":distanceval,"pk":curr.id,"RideTitle":curr.Source," to ":curr.Destination,"Source":curr.Source,"Destination":curr.Destination,"Rider":curr.Driver,"Passenger":curr.Passenger,
-            "Fare":curr.Fare}
+            
+            context={"d":distanceval,"pk":curr.id,"RideTitle":curr.Source," to ":curr.Destination,"Source":curr.Source,"Destination":curr.Destination,"Rider":curr.Driver_Name,"Passenger":curr.Passenger_Name,
+            "Fare":curr.Fare ,"dphone":curr.Driver_Phone , "pphone": curr.Passenger_Phone}
             #Driver.objects.filter(Username=tbd).delete()
             return render(request, "passenger.html",context=context)
       else:
